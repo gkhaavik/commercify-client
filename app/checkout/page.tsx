@@ -1,10 +1,32 @@
 "use client";
 import { useCart } from '@/app/context/CartContext';
+import { createOrder } from '@/utils/orders_api';
+import { makePayment } from '@/utils/payments_api';
 
 export default function CheckoutPage() {
     const { cart, removeFromCart } = useCart();
 
     const total = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+
+    async function handleCheckout() {
+
+        const orderLines = cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+        }));
+
+        const createdOrder = await createOrder({ userId: '1', orderLines });
+
+        await makePayment({
+            orderId: createdOrder.orderId,
+            currency: "USD",
+            paymentProvider: "Stripe",
+            totalAmount: total
+        });
+
+        alert('Order placed successfully!');
+    }
 
     return (
         <div>
@@ -14,14 +36,14 @@ export default function CheckoutPage() {
             ) : (
                 <ul>
                     {cart.map((item) => (
-                        <li key={item.id} className="mb-4">
+                        <li key={item.productId} className="mb-4">
                             <div className="flex justify-between">
                                 <div>
                                     <p>{item.name} (x{item.quantity})</p>
                                     <p>${item.unitPrice * item.quantity}</p>
                                 </div>
                                 <button
-                                    onClick={() => removeFromCart(item.id)}
+                                    onClick={() => removeFromCart(item.productId)}
                                     className="text-red-500"
                                 >
                                     Remove
@@ -33,7 +55,7 @@ export default function CheckoutPage() {
             )}
             <div className="mt-4">
                 <h2>Total: ${total.toFixed(2)}</h2>
-                <button className="bg-green-500 text-white py-2 px-4 rounded mt-2">
+                <button className="bg-green-500 text-white py-2 px-4 rounded mt-2" onClick={handleCheckout}>
                     Proceed to Checkout
                 </button>
             </div>

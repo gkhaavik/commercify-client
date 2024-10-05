@@ -2,14 +2,20 @@ import { Order } from "@/types";
 
 const apiUri = process.env.NEXT_PUBLIC_ORDERS_API_URL;
 
+type CreateOrderRequest = {
+    userId: string;
+    orderLines: OrderLineRequest[];
+}
+
+type OrderLineRequest = {
+    productId: string;
+    quantity: number;
+}
+
 export const getUserOrders = async (userId: string): Promise<Order[]> => {
     const response = await fetch(`${apiUri}/api/v1/orders/user/${userId}`)
         .then((res) => res.json())
         .catch((err) => console.error("api:", err));
-
-
-    console.log("orders:", response);
-
     return response;
 };
 
@@ -20,7 +26,7 @@ export const getAllOrders = async () => {
     return response;
 };
 
-export const createOrder = async (orderData: { productId: string; quantity: number }) => {
+export const createOrder = async (orderData: CreateOrderRequest): Promise<Order> => {
     const response = await fetch(`${apiUri}/api/v1/orders`, {
         method: 'POST',
         headers: {
@@ -28,5 +34,8 @@ export const createOrder = async (orderData: { productId: string; quantity: numb
         },
         body: JSON.stringify(orderData),
     });
-    return response;
+
+    const createdOrder = await response.json();
+
+    return createdOrder;
 };

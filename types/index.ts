@@ -18,6 +18,7 @@ export type Product = {
     productId: string;
     name: string;
     description: string;
+    currency: string;
     unitPrice: number;
     stock: number;
 };

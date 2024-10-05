@@ -1,12 +1,26 @@
 const apiUri = process.env.NEXT_PUBLIC_PAYMENTS_API_URL;
 
-export const makePayment = async (paymentData: { orderId: string; amount: number }) => {
-    const response = await fetch(`${apiUri}/api/v1/payments`, {
+type CreatePaymentRequest = {
+    orderId: string;
+    currency: string;
+    paymentProvider: string;
+    totalAmount: number;
+}
+
+type PaymentResponse = {
+    paymentId: string;
+    status: string;
+    clientSecret: string;
+}
+
+export const makePayment = async (paymentRequest: CreatePaymentRequest): Promise<PaymentResponse> => {
+    const response = await fetch(`${apiUri}/api/v1/payments/create-payment-intent`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(paymentData),
+        body: JSON.stringify(paymentRequest),
     });
-    return response;
+
+    return await response.json();
 };
