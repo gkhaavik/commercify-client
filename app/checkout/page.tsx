@@ -4,7 +4,7 @@ import { useCart } from '@/app/context/CartContext';
 export default function CheckoutPage() {
     const { cart, removeFromCart } = useCart();
 
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
 
     return (
         <div>
@@ -18,7 +18,7 @@ export default function CheckoutPage() {
                             <div className="flex justify-between">
                                 <div>
                                     <p>{item.name} (x{item.quantity})</p>
-                                    <p>${item.price * item.quantity}</p>
+                                    <p>${item.unitPrice * item.quantity}</p>
                                 </div>
                                 <button
                                     onClick={() => removeFromCart(item.id)}

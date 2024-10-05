@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { getProducts } from '../../utils/api';
-import ProductCard from '@/components/products/ProductCard';
 import { Product } from '@/types';
+import { getProducts } from '@/utils/products_api';
+import ProductGrid from '@/components/products/ProductGrid';
 
 
 export default function ProductsPage() {
@@ -18,14 +18,9 @@ export default function ProductsPage() {
     if (!products) return <div>Loading...</div>
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Products</h1>
-            <p>Browse our product selection.</p>
-            <ul>
-                {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </ul>
+        <div className="container mx-auto p-6">
+            <h1 className="text-3xl font-bold mb-6">Products</h1>
+            <ProductGrid products={products} />
         </div>
     );
 }

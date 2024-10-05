@@ -1,17 +1,23 @@
 export type Order = {
-    id: string;
+    orderId: string;
     userId: string;
+    orderLines: OrderLine[];
+    orderStatus: string; // new, processing, completed, cancelled
+    createdAt: Date;
+    updatedAt: Date;
+};
+
+export type OrderLine = {
+    orderlineId: string;
     productId: string;
     quantity: number;
-    totalPrice: number;
-    status: string; // new, processing, completed, cancelled
-    orderDate: string;
+    unitPrice: number;
 };
 
 export type Product = {
-    id: string;
+    productId: string;
     name: string;
     description: string;
-    price: number;
+    unitPrice: number;
     stock: number;
 };

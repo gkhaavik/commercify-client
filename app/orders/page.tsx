@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { getUserOrders } from '../../utils/api';
 import OrderCard from '@/components/orders/OrderCard';
 import { Order } from '@/types';
+import { getUserOrders } from '@/utils/orders_api';
 
 export default function OrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -15,21 +15,22 @@ export default function OrdersPage() {
             .catch((error) => console.error(error));
     }, [userId]);
 
-    console.log(orders);
-
     if (!orders) return <div>Loading...</div>
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Orders</h1>
-            <p>Manage orders</p>
-            <ul>
-                {orders.map((order) => (
-                    <li key={order.id}>
-                        <OrderCard order={order} />
-                    </li>
-                ))}
-            </ul>
+        <div className="container mx-auto p-6">
+            <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
+
+            {orders.length === 0 && <p>No orders found.</p>}
+            {orders.length > 0 && (
+                <ul>
+                    {orders.map((order) => (
+                        <li key={order.orderId}>
+                            <OrderCard order={order} />
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }

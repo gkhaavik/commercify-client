@@ -15,16 +15,24 @@ const ProductCard = ({ product }: ProductCardProps) => {
     };
 
     return (
-        <div className="max-w-sm rounded overflow-hidden shadow-lg p-4 bg-white">
-            <h2 className="text-xl font-bold mb-2">{product.name}</h2>
-            <p className="text-gray-700 text-base mb-4">{product.description}</p>
-            <p className="text-gray-900 font-semibold mb-2">${product.price}</p>
-            <p className="text-gray-600 mb-4">Stock: {product.stock}</p>
+        <div className="border rounded-lg shadow-md p-4 bg-white">
+            <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
+            <p className="text-gray-700 mb-4">{product.description}</p>
+            <div className="flex justify-between items-center mb-4">
+                <span className="text-lg font-semibold">${product.unitPrice.toFixed(2)}</span>
+                <span className={`px-2 py-1 rounded text-sm font-semibold ${product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                    {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                </span>
+            </div>
+
             <button
+                className={`w-full py-2 px-4 rounded text-white font-semibold ${product.stock > 0 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'
+                    }`}
                 onClick={handleAddToCart}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                disabled={product.stock <= 0}
             >
-                Add to Cart
+                {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
             </button>
         </div>
     );
