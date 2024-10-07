@@ -9,7 +9,6 @@ export default function CheckoutPage() {
     const total = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
 
     async function handleCheckout() {
-
         const orderLines = cart.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,
@@ -18,14 +17,14 @@ export default function CheckoutPage() {
 
         const createdOrder = await createOrder({ userId: '1', orderLines });
 
-        await makePayment({
+        const response = await makePayment({
             orderId: createdOrder.orderId,
             currency: "USD",
             paymentProvider: "Stripe",
-            totalAmount: total
         });
 
-        alert('Order placed successfully!');
+        console.log(response);
+        window.location.href = response.redirectUrl;
     }
 
     return (

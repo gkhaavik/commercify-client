@@ -4,17 +4,16 @@ type CreatePaymentRequest = {
     orderId: string;
     currency: string;
     paymentProvider: string;
-    totalAmount: number;
 }
 
 type PaymentResponse = {
     paymentId: string;
     status: string;
-    clientSecret: string;
+    redirectUrl: string;
 }
 
 export const makePayment = async (paymentRequest: CreatePaymentRequest): Promise<PaymentResponse> => {
-    const response = await fetch(`${apiUri}/api/v1/payments/create-payment-intent`, {
+    const response = await fetch(`${apiUri}/stripe/create-checkout-session`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
