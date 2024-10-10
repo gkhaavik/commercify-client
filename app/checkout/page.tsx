@@ -15,12 +15,16 @@ export default function CheckoutPage() {
             unitPrice: item.unitPrice,
         }));
 
-        const createdOrder = await createOrder({ userId: '1', orderLines });
+        console.log("Orderlines:", orderLines);
+
+        const createdOrder = await createOrder({ userId: '1', orderLines }).then((res) => {
+            console.log("Order created:", res);
+            return res;
+        });
 
         const response = await makePayment({
             orderId: createdOrder.orderId,
-            currency: "USD",
-            paymentProvider: "Stripe",
+            currency: "USD"
         });
 
         console.log(response);
